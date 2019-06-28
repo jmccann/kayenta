@@ -1,0 +1,62 @@
+{
+  "canaryConfig": {
+    "name": "app-config-3",
+    "description": "App Canary Configuration",
+    "configVersion": "1",
+    "applications": [
+      "app"
+    ],
+    "judge": {
+      "name": "NetflixACAJudge-v1.0",
+      "judgeConfigurations": {}
+    },
+    "metrics": [
+      {
+        "name": "404 Status Codes",
+        "scopeName": "default",
+        "query": {
+          "type": "prometheus",
+          "metricName": "num_of_404s",
+          "customInlineTemplate": "PromQL:sum(irate(status{code=\"404\", kubernetes_namespace=\"prod-namespace\", kubernetes_name=\"${scope}\"}[5m]))",
+          "serviceType": "prometheus"
+        },
+        "groups": [
+          "StatusCodes"
+        ],
+        "analysisConfigurations": {
+          "canary": {
+            "direction": "increase"
+          }
+        }
+      }
+    ],
+    "templates": {},
+    "classifier": {
+      "groupWeights": {
+        "StatusCodes": 100.0
+      },
+      "scoreThresholds": {
+        "pass": 75.0,
+        "marginal": 75.0
+      }
+    }
+  },
+  "executionRequest": {
+    "scopes": [
+      {
+        "scopeName": "default",
+        "controlScope": "our-control",
+        "experimentScope": "our-experiment",
+        "step": 10
+      }
+    ],
+    "thresholds": {
+      "pass": 95.0,
+      "marginal": 75.0
+    },
+    "beginAfterMins": 0,
+    "analysisIntervalMins": 1,
+    "lifetimeDurationMins": 3,
+    "lookbackMins": 0
+  }
+}

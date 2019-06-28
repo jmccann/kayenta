@@ -1,0 +1,86 @@
+server:
+  port: 8090
+
+redis:
+  connection: redis://localhost:6379
+
+kayenta:
+  standaloneCanaryAnalysis.enabled: true
+
+  google:
+    enabled: false
+
+  graphite:
+    enabled: false
+#    accounts:
+#      - name: my-graphite-account
+#        endpoint:
+#          baseUrl: http://localhost
+#        supportedTypes:
+#          - METRICS_STORE
+
+  prometheus:
+    enabled: true
+    accounts:
+      - name: my-prometheus-account
+        endpoint:
+          baseUrl: http://your.prom.url
+        supportedTypes:
+          - METRICS_STORE
+
+  influxdb:
+    enabled: false
+#    accounts:
+#      - name:
+#        endpoint:
+#          baseUrl: http://localhost:8086
+#        supportedTypes:
+#          - METRICS_STORE
+
+  gcs:
+    enabled: false
+
+  stackdriver:
+    enabled: false
+
+  memory:
+    enabled: true
+    accounts:
+      - name: test-memory-stores
+        supportedTypes:
+          - OBJECT_STORE
+          - CONFIGURATION_STORE
+
+management.security.enabled: false
+
+keiko:
+  queue:
+    redis:
+      queueName: kayenta.keiko.queue
+      deadLetterQueueName: kayenta.keiko.queue.deadLetters
+
+spectator:
+  applicationName: ${spring.application.name}
+  webEndpoint:
+    enabled: true
+
+swagger:
+  enabled: true
+  title: Kayenta API
+  description:
+  contact:
+  patterns:
+    - /admin.*
+    - /canary.*
+    - /canaryConfig.*
+    - /canaryJudgeResult.*
+    - /credentials.*
+    - /fetch.*
+    - /health
+    - /judges.*
+    - /metadata.*
+    - /metricSetList.*
+    - /metricSetPairList.*
+    - /metricServices.*
+    - /pipeline.*
+    - /standalone.*
